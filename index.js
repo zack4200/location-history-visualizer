@@ -43,9 +43,6 @@
 	}
 
 	function stageTwo ( file ) {
-    // Google Analytics event - heatmap upload file
-    ga('send', 'event', 'Heatmap', 'upload', undefined, file.size);
-
 		heat = L.heatLayer( [], heatOptions ).addTo( map );
 
 		var type;
@@ -100,9 +97,6 @@
 	}
 
 	function stageThree ( numberProcessed ) {
-    // Google Analytics event - heatmap render
-    ga('send', 'event', 'Heatmap', 'render', undefined, numberProcessed);
-
 		var $done = $( '#done' );
 
 		// Change tabs :D
