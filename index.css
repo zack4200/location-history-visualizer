@@ -211,30 +211,18 @@ h2 {
 }
 
 @keyframes bouncedelay {
-  0%, 80%, 100% { 
+  0%, 80%, 100% {
     transform: scale(0.0);
     -webkit-transform: scale(0.0);
-  } 40% { 
+  } 40% {
     transform: scale(1.0);
     -webkit-transform: scale(1.0);
   }
 }
 
-/* email signup */
-.email-form {
+.launch-form {
   margin: 16px 0;
   text-align: center;
-}
-
-input#email {
-  font-size: 16px;
-  font-family: PTSans, Helvetica, Arial, sans-serif;
-  border-radius: 2px;
-  background-color: white;
-  padding: 6px 6px;
-  min-width: 200px;
-  border: 1px solid #ccc;
-  outline: 0;
 }
 
 button#launch {
