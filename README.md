@@ -1,6 +1,6 @@
 # location-history-visualizer
 
-**Available online: [locationhistoryvisualizer.com/heatmap/](https://locationhistoryvisualizer.com/heatmap/)**
+**Available online: [https://github.com/huntfx/location-history-visualizer](https://github.com/huntfx/location-history-visualizer)**
 
 A tool for visualizing your complete, consolidated, collected Google [Location History](https://google.com/locationhistory).
 
