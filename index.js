@@ -110,12 +110,12 @@
 		// Update count
 		$( '#numberProcessed' ).text( numberProcessed.toLocaleString() );
 
-    $( '#launch' ).click( function () {
-		$( this ).text( 'Launching... ' );
-		$( 'body' ).addClass( 'map-active' );
-		$done.fadeOut();
-		activateControls();
-    } );
+		$( '#launch' ).click( function () {
+			$( this ).text( 'Launching... ' );
+			$( 'body' ).addClass( 'map-active' );
+			$done.fadeOut();
+			activateControls();
+		} );
 
 		function activateControls () {
 			var $tileLayer = $( '.leaflet-tile-pane' ),
