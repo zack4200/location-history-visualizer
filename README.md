@@ -1,12 +1,15 @@
 # location-history-visualizer
+> **Note**  
+> The original project seemed obandoned. This version is up to date, to work with the json format as of 2025.  
+> And merged some minor fixes from open pull requests and forks.
 
-**Available online: [https://github.com/huntfx/location-history-visualizer](https://github.com/huntfx/location-history-visualizer)**
+**Available online: [https://lucas-vdr-horst.github.io/location-history-visualizer/](https://lucas-vdr-horst.github.io/location-history-visualizer/)**
 
-A tool for visualizing your complete, consolidated, collected Google [Location History](https://google.com/locationhistory).
+A tool for visualizing your complete, consolidated, collected Google Timeline data.
 
 It works directly in your web browser &ndash; no software to download, no packages to install. **Everyone deserves to know what data is being collected about them, without having to fiddle with cryptic pieces of software.**
 
-*location-history-visualizer* takes raw Google Takeout output and produces a heatmap of all of your location data over time, overlaid on an interactive map.
+*location-history-visualizer* takes raw Timeline export and produces a heatmap of all of your location data over time, overlaid on an interactive map.
 
 ## Packages used
 * [leaflet.js](http://leafletjs.com/), for rendering the interactive map
