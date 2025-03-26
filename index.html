@@ -1,7 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Location History Visualizer | Heatmap</title>
+    
+    <meta name="description" content="See the organic behavior of slime mold agents">
+    <meta name="subject" content="Timeline Heatmap">
+    <meta name="author" content="Lucas van der Horst">
+    <meta name="keywords" content="Timeline, Visualization, Heatmap, Google Maps, Location, History, GPS, Privacy, Lucas van der Horst, made by Lucas">
+    <meta name="rating" content="General">
+    <title>Timeline Heatmap</title>
+    <!-- Schema Markup -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "CreativeWork",
+        "name": "Timeline Heatmap",
+        "description": "See the organic behavior of slime mold agents",
+        "url": "https://timeline-heatmap.madebylucas.nl",
+        "author": {
+          "@type": "Person",
+          "name": "Lucas van der Horst"
+        }
+    }
+    </script>
+    <!-- Some very basic and privacy respecting user-count statistics with GoatCounter -->
+    <script>
+        window.goatcounter = {
+            path: function(p) { return location.host + p }
+        }
+    </script>
+    <script data-goatcounter="https://madebylucas.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="description" content="Visualize your collected Google Location History data using an interactive heatmap directly in your browser.">
     <link href="style.css" rel="stylesheet">
@@ -16,7 +44,7 @@
             <!-- Intro, before data has been uploaded -->
             <div id="intro" class="content-box">
                 <h2>Location History Visualizer</h2>
-                <p>Welcome to <b>Location History Visualizer</b>, a tool for visualizing your collected Google Timeline data with heatmaps. <i>Don't worry&mdash;all processing and visualization happens directly on your computer, so rest assured that nobody is able to access your Location History but you.</i></p>
+                <p>Welcome to <b>Location History Visualizer</b>, a tool to visualize what location data Google Maps has stored on you, by making a heatmap. <i>Don't worry&mdash;all processing and visualization happens directly on your device.</i></p>
                 <p>First download your data:</p>
                 <ul style="list-style: none; padding: 0;">
                     <li><strong>On Android:</strong> <span style="color: #34a853;">Phone settings</span> → <span style="color: #34a853;">Location</span> → <span style="color: #34a853;">Location Services</span> → <span style="color: #34a853;">Timeline</span> → <span style="color: #34a853;">Export Timeline data</span></li>
