@@ -41,6 +41,13 @@
 			stageTwo( this.files[0] );
 			dropzone.disable();
 		} );
+
+		// Logic for the dropdown text
+		document.getElementById("verifyToggle").addEventListener("click", function(event) {
+			event.preventDefault();
+			var info = document.getElementById("verifyInfo");
+			info.style.display = (info.style.display === "none" || info.style.display === "") ? "block" : "none";
+		});
 	}
 
 	function stageTwo ( file ) {
