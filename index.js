@@ -66,6 +66,7 @@
 		$( '#working' ).removeClass( 'hidden' );
 
 		var latlngs = [];
+		window.latlngs = latlngs; // For debugging
 		function done() {
 			status( 'Generating map...' );
 			heat._latlngs = latlngs;
@@ -75,13 +76,14 @@
 		}
 
 		var os = new oboe();
+		os.done(done);
+		const androidLatlngRegex = /([-+]?[0-9]*\.?[0-9]+)°,\s*([-+]?[0-9]*\.?[0-9]+)°/;
+		const iosLatlngRegex = /geo:([-+]?[0-9]*\.?[0-9]+),([-+]?[0-9]*\.?[0-9]+)/;
 
 		// Android
-		os.node('semanticSegments.*.timelinePath.*', function (entry) {
-			if (!entry.point) return oboe.drop; // Ensure the field exists
-		
+		os.node('semanticSegments.*.timelinePath.*.point', function (entry) {
 			// Extract latitude and longitude from the 'point' string
-			var match = entry.point.match(/([-+]?[0-9]*\.?[0-9]+)°,\s*([-+]?[0-9]*\.?[0-9]+)°/);
+			var match = entry.match(androidLatlngRegex);
 		
 			if (match) {
 				var latitude = parseFloat(match[1]);
@@ -89,13 +91,106 @@
 		
 				if (type === 'json' && !isNaN(latitude) && !isNaN(longitude)) {
 					latlngs.push([latitude, longitude]);
+				} else {
+					console.log("latitude or longitude is NaN")
 				}
+			} else {
+				console.log("Android timelinePath-point no match")
 			}
 		
 			return oboe.drop;
-		} ).done(done);
+		});
+		os.node('semanticSegments.*.activity', function (entry) {
+			if (!entry.start || !entry.end) { // Ensure the fields exist
+				console.log("Either start or end did not exist");
+				return oboe.drop;
+			}
+
+			// Extract latitude and longitude from the 'start' and 'end' strings
+			var startMatch = entry.start.latLng.match(androidLatlngRegex);
+			var endMatch = entry.end.latLng.match(androidLatlngRegex);
+
+			if (startMatch) {
+				var startLatitude = parseFloat(startMatch[1]);
+				var startLongitude = parseFloat(startMatch[2]);
+
+				if (!isNaN(startLatitude) && !isNaN(startLongitude)) {
+					latlngs.push([startLatitude, startLongitude]);
+				} else {
+					console.log("Either start latitude or longitude is NaN");
+				}
+			} else {
+				console.log("No start match");
+			}
+
+			if (endMatch) {
+				var endLatitude = parseFloat(endMatch[1]);
+				var endLongitude = parseFloat(endMatch[2]);
+
+				if (!isNaN(endLatitude) && !isNaN(endLongitude)) {
+					latlngs.push([endLatitude, endLongitude]);
+				} else {
+					console.log("Either end latitude or longitude is NaN");
+				}
+			} else {
+				console.log("No end match");
+			}
+
+			return oboe.drop;
+		});
+		os.node('semanticSegments.*.visit.topCandidate.placeLocation.latLng', function (entry) {
+			var match = entry.match(androidLatlngRegex);
+			if (match) {
+				var latitude = parseFloat(match[1]);
+				var longitude = parseFloat(match[2]);
+				if (!isNaN(latitude) && !isNaN(longitude)) {
+					latlngs.push([latitude, longitude]);
+				} else {
+					console.log("placeLocation is NaN");
+				}
+			} else {
+				console.log("No placeLocation match");
+			}
+
+			return oboe.drop;
+		});
+		os.node('*.position.LatLng', function (entry) {
+			var match = entry.match(androidLatlngRegex);
+			if (match) {
+				var latitude = parseFloat(match[1]);
+				var longitude = parseFloat(match[2]);
+				if (!isNaN(latitude) && !isNaN(longitude)) {
+					latlngs.push([latitude, longitude]);
+				} else {
+					console.log("rawSignal position is NaN");
+				}
+			} else {
+				console.log("No rawSignal position match");
+			}
+
+			return oboe.drop;
+		});
 
 		// iOS
+		os.node('!.*.timelinePath.*.point', function (entry) {
+			// Extract latitude and longitude from the 'point' string
+			var match = entry.match(iosLatlngRegex);
+		
+			if (match) {
+				var latitude = parseFloat(match[1]);
+				var longitude = parseFloat(match[2]);
+		
+				if (type === 'json' && !isNaN(latitude) && !isNaN(longitude)) {
+					latlngs.push([latitude, longitude]);
+				} else {
+					console.log("latitude or longitude is NaN")
+				}
+			} else {
+				console.log("iOS timelinePath-point no match")
+			}
+		
+			return oboe.drop;
+		});
 		os.node('*.activity', function (entry) {
 			if (!entry.start || !entry.end) { // Ensure the fields exist
 				console.log("Either start or end did not exist");
@@ -103,8 +198,8 @@
 			}
 
 			// Extract latitude and longitude from the 'start' and 'end' strings
-			var startMatch = entry.start.match(/geo:([-+]?[0-9]*\.?[0-9]+),([-+]?[0-9]*\.?[0-9]+)/);
-			var endMatch = entry.end.match(/geo:([-+]?[0-9]*\.?[0-9]+),([-+]?[0-9]*\.?[0-9]+)/);
+			var startMatch = entry.start.match(iosLatlngRegex);
+			var endMatch = entry.end.match(iosLatlngRegex);
 
 			if (startMatch) {
 				var startLatitude = parseFloat(startMatch[1]);
@@ -144,7 +239,7 @@
 				return oboe.drop;
 			}
 
-			var match = entry.topCandidate.placeLocation.match(/geo:([-+]?[0-9]*\.?[0-9]+),([-+]?[0-9]*\.?[0-9]+)/);
+			var match = entry.topCandidate.placeLocation.match(iosLatlngRegex);
 			if (match) {
 				var latitude = parseFloat(match[1]);
 				var longitude = parseFloat(match[2]);
@@ -157,25 +252,6 @@
 				console.log("No placeLocation match");
 			}
 
-			return oboe.drop;
-		});
-		os.node('*.timelinePath', function (entry) {
-			entry.forEach(function (item) {
-				if (item.point) {
-					var match = item.point.match(/geo:([-+]?[0-9]*\.?[0-9]+),([-+]?[0-9]*\.?[0-9]+)/);
-					if (match) {
-						var latitude = parseFloat(match[1]);
-						var longitude = parseFloat(match[2]);
-						if (!isNaN(latitude) && !isNaN(longitude)) {
-							latlngs.push([latitude, longitude]);
-						} else {
-							console.log("timelinePath-point is NaN")
-						}
-					}
-				} else {
-					console.log("timelinePath-point doesn't exist");
-				}
-			});
 			return oboe.drop;
 		});
 
