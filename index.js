@@ -3,8 +3,9 @@
 		heatOptions = {
 			tileOpacity: 1,
 			heatOpacity: 1,
-			radius: 6,
-			blur: 3
+			radius: 7,
+			blur: 4,
+			gradient: {0.4: "blue", 0.6: "cyan", 0.7: "lime", 0.8: "yellow", 1: "red"},
 		};
 
 	function status( message ) {
@@ -290,12 +291,11 @@
 
 			// Update values of the dom elements
 			function updateInputs () {
-				var option;
-				for ( option in heatOptions ) {
-					if ( heatOptions.hasOwnProperty( option ) ) {
-						document.getElementById( option ).value = heatOptions[option];
+				document.querySelectorAll("#controls input.control").forEach(input => {
+					if (heatOptions[input.id] !== undefined) {
+						input.value = heatOptions[input.id];
 					}
-				}
+				});				
 			}
 
 			updateInputs();
