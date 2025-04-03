@@ -263,6 +263,20 @@
 			return oboe.drop;
 		});
 
+		// Old JSON format
+		var SCALAR_E7 = 0.0000001; // Since Google Takeout stores latlngs as integers
+		os.node( 'locations.*', function ( location ) {
+			var latitude = location.latitudeE7 * SCALAR_E7,
+				longitude = location.longitudeE7 * SCALAR_E7;
+
+			// Handle negative latlngs due to google unsigned/signed integer bug.
+			if ( latitude > 180 ) latitude = latitude - (2 ** 32) * SCALAR_E7;
+			if ( longitude > 180 ) longitude = longitude - (2 ** 32) * SCALAR_E7;
+
+			if ( type === 'json' ) latlngs.push( [ latitude, longitude ] );
+			return oboe.drop;
+		});
+
 		var fileSize = prettySize( file.size );
 
 		status( 'Preparing to import file ( ' + fileSize + ' )...' );
