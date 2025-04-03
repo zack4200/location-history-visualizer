@@ -110,7 +110,7 @@
 		});
 		os.node('semanticSegments.*.activity', function (entry) {
 			if (!entry.start || !entry.end) { // Ensure the fields exist
-				console.log("Either start or end did not exist");
+				console.log("Activity either start or end did not exist");
 				return oboe.drop;
 			}
 
@@ -199,9 +199,9 @@
 		
 			return oboe.drop;
 		});
-		os.node('*.activity', function (entry) {
+		os.node('!.*.activity', function (entry) {
 			if (!entry.start || !entry.end) { // Ensure the fields exist
-				console.log("Either start or end did not exist");
+				console.log("Activity either start or end did not exist");
 				return oboe.drop;
 			}
 
@@ -266,6 +266,10 @@
 		// Old JSON format
 		var SCALAR_E7 = 0.0000001; // Since Google Takeout stores latlngs as integers
 		os.node( 'locations.*', function ( location ) {
+			if (location.latitudeE7 === undefined || location.longitudeE7 === undefined) {
+				console.log("latitudeE7 or longitudeE7 is undefined");
+				return oboe.drop;
+			}
 			var latitude = location.latitudeE7 * SCALAR_E7,
 				longitude = location.longitudeE7 * SCALAR_E7;
 
